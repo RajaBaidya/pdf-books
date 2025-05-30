@@ -19,7 +19,12 @@ const __dirname = path.dirname(__filename);
 const app = express();
 
 // Middleware
-app.use(cors());
+// app.use(cors());
+// Add this CORS configuration
+app.use(cors({
+  origin: ['http://localhost:5173', 'your-vercel-frontend-url.vercel.app'],
+  credentials: true
+}));
 app.use(express.json());
 
 // Serve static files
