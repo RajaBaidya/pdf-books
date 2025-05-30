@@ -22,7 +22,7 @@ const app = express();
 // app.use(cors());
 // Add this CORS configuration
 app.use(cors({
-  origin: ['http://localhost:5173', 'your-vercel-frontend-url.vercel.app'],
+  origin: ['https://pdf-books-b3yd.onrender.com', 'pdf-books.vercel.app'],
   credentials: true
 }));
 app.use(express.json());

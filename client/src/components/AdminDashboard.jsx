@@ -5,7 +5,7 @@ import '../styles/admin.css';
 
 // Create an axios instance with the correct base URL
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api'
+  baseURL: 'https://pdf-books-b3yd.onrender.com'
 });
 
 // Add token to requests if it exists
