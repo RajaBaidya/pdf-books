@@ -1,4 +1,10 @@
 import axios from 'axios';
+import express from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Create an axios instance with environment variable
 const api = axios.create({
@@ -75,5 +81,13 @@ export const logout = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
 };
+
+// Serve static files from the React app
+app.use(express.static(path.join(__dirname, '../client/dist')));
+
+// Handle React routing, return all requests to React app
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/dist/index.html'));
+});
 
 export default api;

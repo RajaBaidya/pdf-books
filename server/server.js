@@ -18,13 +18,23 @@ const __dirname = path.dirname(__filename);
 // Create Express app
 const app = express();
 
-// Middleware
-// app.use(cors());
-// Add this CORS configuration
+// Request logging middleware - add this here
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.path}`);
+  next();
+});
+
+// CORS middleware
 app.use(cors({
-  origin: ['https://pdf-books-b3yd.onrender.com', 'pdf-books.vercel.app'],
+  origin: [
+    'https://pdf-books-b3yd.onrender.com', 
+    'https://pdf-books.vercel.app',
+    'http://localhost:5173'
+  ],
   credentials: true
 }));
+
+// Other middleware
 app.use(express.json());
 
 // Serve static files
@@ -44,4 +54,4 @@ app.use('/api/books', bookRoutes);
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
-}); 
+});
