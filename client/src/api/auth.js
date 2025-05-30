@@ -1,8 +1,12 @@
 import axios from 'axios';
 
-// Create an axios instance
+// Create an axios instance with environment variable
 const api = axios.create({
-  baseURL: 'http://localhost:5000/api'
+  baseURL: `${import.meta.env.VITE_API_URL}/api` || 'https://pdf-books-b3yd.onrender.com',
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json'
+  }
 });
 
 // Add token to requests if it exists
@@ -12,7 +16,20 @@ api.interceptors.request.use((config) => {
     config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
+}, (error) => {
+  return Promise.reject(error);
 });
+
+// Add response interceptor for error handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      logout(); // Auto logout on authentication error
+    }
+    return Promise.reject(error);
+  }
+);
 
 // Login user
 export const login = async (credentials) => {
@@ -48,6 +65,7 @@ export const getCurrentUser = async () => {
     const response = await api.get('/auth/me');
     return response.data;
   } catch (error) {
+    console.error('Error fetching current user:', error);
     return null;
   }
 };
@@ -56,4 +74,6 @@ export const getCurrentUser = async () => {
 export const logout = () => {
   localStorage.removeItem('token');
   localStorage.removeItem('user');
-}; 
+};
+
+export default api;
